@@ -25,14 +25,25 @@ namespace HelloApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.Map("/index", Index);
+            app.Map("/about", About);
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync(_env.ApplicationName);
+            app.Run(async context => {
+                await context.Response.WriteAsync("Page is not found");
+            });
+        }
+
+        private static void Index(IApplicationBuilder app)
+        {
+            app.Run(async context => {
+                await context.Response.WriteAsync("Index");
+            });
+        }
+
+        private static void About(IApplicationBuilder app)
+        {
+            app.Run(async context => {
+                await context.Response.WriteAsync("About");
             });
         }
     }
