@@ -26,8 +26,8 @@ namespace HelloApp
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.Map("/home", home => {
-                app.Map("/index", Index);
-                app.Map("/about", About);
+                home.Map("/index", Index);
+                home.Map("/about", About);
             });
             
 
