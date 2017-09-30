@@ -25,8 +25,11 @@ namespace HelloApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.Map("/index", Index);
-            app.Map("/about", About);
+            app.Map("/home", home => {
+                app.Map("/index", Index);
+                app.Map("/about", About);
+            });
+            
 
             app.Run(async context => {
                 await context.Response.WriteAsync("Page is not found");
