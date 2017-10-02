@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using System.IO;
+using System.Text;
 
 namespace HelloApp
 {
@@ -19,19 +21,20 @@ namespace HelloApp
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseFileServer(new FileServerOptions
-            {
-                EnableDirectoryBrowsing = true,
-               // FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\html")),
-                RequestPath = new PathString("/pages"),
-                EnableDefaultFiles = false
+            app.UseOwin(pipeline => {
+                pipeline(next => SendResponceAsync);
             });
 
-            app.Run(async context =>
-            {
-                await context.Response.WriteAsync("Hello world!");
-            });
+        }
 
+        public Task SendResponceAsync(IDictionary<String, Object> enviroment)
+        {
+            String responseText = "Hello ASP.NET Core";
+            Byte[] responseBytes = Encoding.UTF8.GetBytes(responseText);
+
+            var responseStream = (Stream)enviroment["owin.ResponseBody"];
+
+            return responseStream.WriteAsync(responseBytes, 0, responseBytes.Length);
         }
     }
 }
