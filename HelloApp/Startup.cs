@@ -17,12 +17,10 @@ namespace HelloApp
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseToken("55555555");
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<AuthenticationMiddleware>();
+            app.UseMiddleware<RoutingMiddleware>();
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World");
-            });
         }
     }
 }
